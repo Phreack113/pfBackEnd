@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 
-const ProductManager = require('../productManager')
+const ProductManager = require('../../productManager')
 const productManager = new ProductManager('./src/data/products.json')
 
 router.get('/', async (req, res) => {
@@ -20,6 +20,7 @@ router.get('/:pid', async (req, res) => {
 router.post('/', async (req, res) => {
     const r = await productManager.addProduct(req.body)
     res.json(r)
+    realTimeProducts()
 })
 
 router.patch('/:pid', async (req, res) => {
@@ -28,12 +29,19 @@ router.patch('/:pid', async (req, res) => {
     console.log(pid, objUpdate)
     const r = await productManager.updateProduct(pid, objUpdate)
     res.json(r)
+    realTimeProducts()
 })
 
 router.delete('/:pid', async (req, res) => {
     const { pid } = req.params
     const r = await productManager.deleteProduct(pid)
     res.json(r)
+    realTimeProducts()
 })
 
-module.exports = router
+const realTimeProducts = async () => {
+    const products = await productManager.getProducts()
+    io.emit('realtimeproducts', products)
+}
+
+module.exports = { router , productManager }

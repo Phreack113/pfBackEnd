@@ -1,0 +1,23 @@
+<h1 class='title'>Lista de productos creados</h1>
+{{#if true}}
+  {{#each products}}
+    <div class="product-card">
+        <div class="product-category">
+            <p>{{this.category}}</p>
+        </div>
+        <div class="productCardBottom">
+            <div class="product-title">
+                <h2>{{this.title}}</h2>
+            </div>
+            <div class="product-description">
+                <p>{{this.description}}</p>
+            </div>
+            <div class="product-data">
+                <p>Code: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <p>Price: ${{this.price}}</p>
+            </div>        
+        </div>
+    </div>
+  {{/each}}
+{{/if}}

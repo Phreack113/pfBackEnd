@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body{
+    background-image: linear-gradient(to bottom right, rgb(25, 25, 25), rgb(77, 77, 77));
+    height: 100vh;
+}
+
+.product-card{
+    margin: 10px;
+    padding: 5px;
+    max-width: 500px;
+    
+}
+
+.product-category p{
+    width: 100%;
+    text-align: right;
+    border-radius: 5px 5px 0 0;
+    background-image: linear-gradient(to bottom right, rgb(0, 84, 87), rgb(0, 105, 114));
+    padding: 5px;
+}
+
+.product-data{
+    display: flex;
+    justify-content: space-between;
+}
+
+.title{
+    padding: 20px 0 5px 20px;
+}
+.subTitle{
+    padding-left: 20px;
+}
+
+h1{
+    color: white;
+}
+
+h2{
+    color: black;
+}
+
+p{
+    padding: 5px 0;
+    color: black
+}
+
+.product-category p, .subTitle{
+    color: white;
+}
+
+.product-title, .product-description, .product-data{
+    padding: 0 20px;
+    /* background-color: aquamarine;    */
+}
+
+.productCardBottom{
+    background-image: linear-gradient(to bottom right, rgb(170, 170, 170), rgb(140, 140, 140));
+    border-radius: 0 0 5px 5px;
+}
