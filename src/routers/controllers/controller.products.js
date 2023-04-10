@@ -1,47 +1,85 @@
 const { Router } = require('express')
 const router = Router()
 
-const ProductManager = require('../../productManager')
-const productManager = new ProductManager('./src/data/products.json')
+const Products = require('../../dao/models/Products.model')
 
 router.get('/', async (req, res) => {
-    const { limit } = req.query
-    const products = await productManager.getProducts()
-    const filterProducts = limit ? products.slice(0, limit) : products
-    res.json(filterProducts)
+    try {
+        const { limit } = req.query
+        const products = await Products.find().limit(limit)
+        res.json(products)
+    } catch (error) {
+        res.status(400).json({error: 'Bad request'})
+        console.log({ error })
+    }
 })
 
 router.get('/:pid', async (req, res) => {
-    const { pid } = req.params
-    const products = await productManager.getProductById(pid)
-    res.json({ products })
+    try {
+        const { pid } = req.params
+        const product = await Products.findById(pid)
+        res.json({ product })
+    } catch (error) {
+        res.status(400).json({error: 'Bad request'})
+        console.log({ error })
+    }
 })
 
 router.post('/', async (req, res) => {
-    const r = await productManager.addProduct(req.body)
-    res.json(r)
-    realTimeProducts()
+    try {
+        const { code, title, description, price, thumbnail, stock, category } = req.body
+        
+        const newProduct = {
+            code,
+            title,
+            description,
+            price,
+            thumbnail,
+            stock,
+            category
+        }
+        
+        const product = await Products.create(newProduct)
+        console.log(product)
+        res.json(product)
+        realTimeProducts()
+    } catch (error) {
+        res.status(400).json({error: 'Bad request'})
+        console.log({ error })
+    }
 })
 
 router.patch('/:pid', async (req, res) => {
-    const objUpdate = req.body
-    const { pid } = req.params
-    console.log(pid, objUpdate)
-    const r = await productManager.updateProduct(pid, objUpdate)
-    res.json(r)
-    realTimeProducts()
+    try {
+        const objUpdate = req.body
+        const { pid } = req.params
+        const product = await Products.findByIdAndUpdate(pid, objUpdate, { returnDocument: 'after' })
+        res.json(product)
+        realTimeProducts()
+    } catch (error) {
+        res.status(400).json({error: 'Bad request'})
+        console.log(error)
+    }
 })
 
 router.delete('/:pid', async (req, res) => {
-    const { pid } = req.params
-    const r = await productManager.deleteProduct(pid)
-    res.json(r)
-    realTimeProducts()
+    try {
+        const { pid } = req.params
+        const r = await Products.findByIdAndDelete(pid)
+        res.json(r)
+    } catch (error) {
+        res.status(400).json({error: 'Bad request'})
+        console.log({ error })
+    }
 })
 
 const realTimeProducts = async () => {
-    const products = await productManager.getProducts()
-    io.emit('realtimeproducts', products)
+    try {
+        const products = await Products.find()
+        io.emit('realtimeproducts', products)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
-module.exports = { router , productManager }
+module.exports = router

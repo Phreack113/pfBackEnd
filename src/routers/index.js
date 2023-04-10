@@ -1,11 +1,13 @@
 const cartController = require('./controllers/controller.carts')
-const { router: productController } = require('./controllers/controller.products')
-const browserController = require('./controllers/controller.browser')
+const productController = require('./controllers/controller.products')
+const browserProductController = require('./controllers/controller.browser')
+const chatController = require('./controllers/controller.chat')
 
 const router = app => {
     app.use('/api/carts', cartController)
     app.use('/api/products', productController)
-    app.use('/', browserController)
+    app.use('/', browserProductController)
+    app.use('/', chatController)
 }
 
 module.exports = router

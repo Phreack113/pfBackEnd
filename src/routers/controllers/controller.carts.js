@@ -1,25 +1,43 @@
 const { Router } = require('express')
 const router = Router()
 
-const CartManager = require('../../cartManager')
-const cartManager = new CartManager('./src/data/carts.json', './src/data/products.json')
+const Carts = require('../../dao/models/Carts.model')
+const Products = require('../../dao/models/Products.model')
 
 router.get('/:cid', async (req, res) => {
-    const { cid } = req.params
-    const r = await cartManager.getCartById(cid)
-    res.json(r)
+    try {
+        const { cid } = req.params
+        const r = await Carts.findById(cid)
+        res.json(r)
+    } catch (error) {
+        res.status(400).json({error: 'Bad request'})
+        console.log(error)        
+    }
 })
 
 router.post('/',  async (req, res) => {
-    const r = await cartManager.createCart()
-    res.json(r)
+    try {
+        const r = await Carts.create({})
+        res.json(r)
+    } catch (error) {
+        res.status(400).json({error: 'Bad request'})
+        console.log(error)        
+    }
 })
 
-router.post('/:cid/product/:pid', async (req, res) => {
-    const { cid, pid } = req.params
-    const { quantity } = req.body
-    const r = await cartManager.addProduct(cid, pid, quantity)
-    res.json(r)
+router.put('/:cid/product/:pid', async (req, res) => {
+    try {
+        const { cid, pid } = req.params
+        const cart = await Carts.findById(cid)
+        const prd = await Products.findById(pid)
+        const pIndex = cart.products.findIndex(p => `${p._id}` === `${prd._id}`)
+        pIndex >= 0 ? cart.products[pIndex].qty++ : cart.products.push({_id: pid, qty: 1}) 
+        const updateCart = await Carts.findByIdAndUpdate(cid, cart, {returnDocument: 'after'})
+        res.json(updateCart)
+    } catch (error) {
+        console.log(error)        
+        res.status(400).json({error: 'Bad request'})
+    }
 })
 
 module.exports = router

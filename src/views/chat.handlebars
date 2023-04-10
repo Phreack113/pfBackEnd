@@ -1,0 +1,30 @@
+<div class="encab">
+    <h1 class='title'>Chat grupal</h1>
+    <p class="userName"></p>
+</div>
+<div class="chatContainer off">
+  {{#each chats}}
+    <div class="chat">
+        <div class="user">
+            {{this.user}}        
+        </div>
+        <div class="msg">
+            {{this.message}}
+        </div>
+    </div>
+  {{/each}}
+</div>
+<div class="texto off">
+    <input type="text" name="msg" id="msg" placeholder="Mensaje...">
+    <button id="btnSend">
+        <i class="fa-solid fa-paper-plane"></i>
+    </button>
+</div>
+<form action="" class="mailContainer">
+    <input type="email" name="email" id="email" placeholder="Ingrese su mail">
+    <button id="btnMail" type="submit">Ingresar</button>
+</form>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>
+
+

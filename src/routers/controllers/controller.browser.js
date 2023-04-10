@@ -1,10 +1,10 @@
 const { Router } = require('express')
 const router = Router()
 
-const { productManager } = require('./controller.products')
+const Products = require('../../dao/models/Products.model')
 
 router.get('/', async (req, res) => {
-    const products = await productManager.getProducts()
+    const products = await Products.find().lean()
     console.log(products)
     res.render('home.handlebars', {
         products,
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/realtimeproducts', async (req, res) => {
-    const products = await productManager.getProducts()
+    const products = await Products.find().lean()
     console.log(products)
     res.render('realtimeproducts.handlebars', {
         products,
