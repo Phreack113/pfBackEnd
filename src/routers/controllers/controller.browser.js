@@ -23,4 +23,14 @@ router.get('/realtimeproducts', async (req, res) => {
     })
 })
 
+router.get('/products', async (req, res) => {
+    const products = await Products.find().lean()
+    console.log(products)
+    res.render('products.handlebars', {
+        products,
+        title: 'Productos',
+        style: 'style.css'
+    })
+})
+
 module.exports = router

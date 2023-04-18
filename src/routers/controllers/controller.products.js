@@ -5,11 +5,44 @@ const Products = require('../../dao/models/Products.model')
 
 router.get('/', async (req, res) => {
     try {
-        const { limit } = req.query
-        const products = await Products.find().limit(limit)
-        res.json(products)
+        const { limit = 10, page = 1, query = '', sort = 'asc' } = req.query
+        
+        const pQuery = {
+            category: {
+                $regex: query,
+                $options: 'i'
+            }
+        }
+
+        const pOptions = {
+            limit,
+            page,
+            sort: {
+                price: sort
+            }
+        }
+
+        const products = await Products.paginate(pQuery, pOptions)
+        const { docs: payload, totalPages, prevPage, nextPage, page : npage, hasPrevPage, hasNextPage } = products
+        
+
+        const resObj = {
+            status: 'success',
+            payload,
+            totalPages, 
+            prevPage, 
+            nextPage, 
+            npage, 
+            hasPrevPage, 
+            hasNextPage,
+            prevLink: hasPrevPage ? `http://localhost:3002/api/products?limit=${limit}&page=${prevPage}&query=${query}&sort=${sort}` : null,
+            nextLink: hasNextPage ? `http://localhost:3002/api/products?limit=${limit}&page=${nextPage}&query=${query}&sort=${sort}` : null
+        }
+        
+        res.json(resObj)
+
     } catch (error) {
-        res.status(400).json({error: 'Bad request'})
+        res.status(400).json({ error: 'Bad request' })
         console.log({ error })
     }
 })
@@ -20,7 +53,7 @@ router.get('/:pid', async (req, res) => {
         const product = await Products.findById(pid)
         res.json({ product })
     } catch (error) {
-        res.status(400).json({error: 'Bad request'})
+        res.status(400).json({ error: 'Bad request' })
         console.log({ error })
     }
 })
@@ -28,7 +61,7 @@ router.get('/:pid', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const { code, title, description, price, thumbnail, stock, category } = req.body
-        
+
         const newProduct = {
             code,
             title,
@@ -38,13 +71,13 @@ router.post('/', async (req, res) => {
             stock,
             category
         }
-        
+
         const product = await Products.create(newProduct)
         console.log(product)
         res.json(product)
         realTimeProducts()
     } catch (error) {
-        res.status(400).json({error: 'Bad request'})
+        res.status(400).json({ error: 'Bad request' })
         console.log({ error })
     }
 })
@@ -57,7 +90,7 @@ router.patch('/:pid', async (req, res) => {
         res.json(product)
         realTimeProducts()
     } catch (error) {
-        res.status(400).json({error: 'Bad request'})
+        res.status(400).json({ error: 'Bad request' })
         console.log(error)
     }
 })
@@ -68,7 +101,7 @@ router.delete('/:pid', async (req, res) => {
         const r = await Products.findByIdAndDelete(pid)
         res.json(r)
     } catch (error) {
-        res.status(400).json({error: 'Bad request'})
+        res.status(400).json({ error: 'Bad request' })
         console.log({ error })
     }
 })

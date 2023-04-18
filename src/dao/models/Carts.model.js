@@ -19,6 +19,10 @@ const collectionSchema = new mongoose.Schema({
     }
 })
 
+collectionSchema.pre('find', function () {
+    this.populate('products.product')
+  })
+
 const Carts = mongoose.model(collectionName, collectionSchema)
 
 module.exports = Carts
