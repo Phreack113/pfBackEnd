@@ -1,0 +1,6 @@
+<h1 class='title'>Carrito ID: {{cart._id}}</h1>
+  {{#each cart.products}}
+    <div class="product-card">
+        ID de producto: {{this._id}} // Cantidad: {{this.qty}}
+    </div>
+  {{/each}}

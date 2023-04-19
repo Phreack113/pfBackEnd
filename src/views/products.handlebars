@@ -1,0 +1,35 @@
+<h1 class='title'>Productos</h1>
+<div class="content">
+    {{#each products.payload}}
+    <div class="product-card">
+        <div class="product-category">
+            <button data-id={{this._id}} class="order">¡Order now!</button>
+            <p>{{this.category}}</p>
+        </div>
+        <div class="productCardBottom">
+            <div class="product-title">
+                <h2>{{this.title}}</h2>
+            </div>
+            <div class="product-description">
+                <p>{{this.description}}</p>
+            </div>
+            <div class="product-data">
+                <p>Code: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <p>Price: ${{this.price}}</p>
+            </div>        
+        </div>
+    </div>
+    {{/each}}
+    <div class="paginateContainer">
+        {{#if products.hasPrevPage}}
+            <a href={{products.prevLink}}>Prev</a> {{^}} <p> </p>
+        {{/if}}
+        <p>{{products.npage}} de {{products.totalPages}}</p>
+        {{#if products.hasNextPage}}
+            <a href={{products.nextLink}}>Next</a> {{^}} <p> </p>
+        {{/if}}
+    </div>
+</div>
+
+<script src="./js/products.js"></script>
