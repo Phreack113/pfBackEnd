@@ -14,6 +14,14 @@ router.get('/', async (req, res) => {
     })
 })
 
+router.get('/signin', async (req, res) => {
+    res.render('signin.handlebars')
+})
+
+router.get('/login', async (req, res) => {
+    res.render('login.handlebars')
+})
+
 router.get('/cart/:cid', async (req, res) => {
     try {
         const { cid } = req.params
