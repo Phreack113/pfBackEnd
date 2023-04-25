@@ -3,8 +3,10 @@ const router = Router()
 
 const Products = require('../../dao/models/Products.model')
 const Carts = require('../../dao/models/Carts.model')
+const privateAccess = require('../../middlewares/privateAccess.middleware')
+const publicAccess = require('../../middlewares/publicAccess.middleware')
 
-router.get('/', async (req, res) => {
+router.get('/', privateAccess, async (req, res) => {
     const products = await Products.find().lean()
     console.log(products)
     res.render('home.handlebars', {
@@ -14,15 +16,15 @@ router.get('/', async (req, res) => {
     })
 })
 
-router.get('/signin', async (req, res) => {
+router.get('/signin', publicAccess, async (req, res) => {
     res.render('signin.handlebars')
 })
 
-router.get('/login', async (req, res) => {
+router.get('/login', publicAccess, async (req, res) => {
     res.render('login.handlebars')
 })
 
-router.get('/cart/:cid', async (req, res) => {
+router.get('/cart/:cid', privateAccess, async (req, res) => {
     try {
         const { cid } = req.params
         const cart = await Carts.findById(cid).lean()
@@ -38,7 +40,7 @@ router.get('/cart/:cid', async (req, res) => {
     }
 })
 
-router.get('/realtimeproducts', async (req, res) => {
+router.get('/realtimeproducts', privateAccess, async (req, res) => {
     const products = await Products.find().lean()
     console.log(products)
     res.render('realtimeproducts.handlebars', {
@@ -48,7 +50,7 @@ router.get('/realtimeproducts', async (req, res) => {
     })
 })
 
-router.get('/products', async (req, res) => {
+router.get('/products', privateAccess, async (req, res) => {
 
     const { limit = 10, page = 1 } = req.query
 

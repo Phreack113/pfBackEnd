@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
         if (existingUser) return res.status(400).json({status: 'error', error: 'bad request'})
         
         const user = await Users.create(newUser)
-        res.json({ status: 'success' , user})
+        res.status(201).json({ status: 'success' , massage: user})
     } catch (error) {
         console.log(error.message)
         res.status(500).json({ status: error, message: 'Internal server error' })
