@@ -20,6 +20,7 @@ router.post('/', async (req, res) => {
             first_name: user.first_name,
             last_name: user.last_name,
             email: user.email,
+            role: user.role,
         }
 
         res.json({ status: 'success', message: req.session.user })

@@ -73,7 +73,8 @@ router.get('/products', privateAccess, async (req, res) => {
     console.log(resObj)
 
     res.render('products.handlebars', {
-        products: resObj,
+        products: resObj, 
+        user: req.session.user,
         title: 'Productos',
         style: 'style.css'
     })

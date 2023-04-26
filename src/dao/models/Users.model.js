@@ -20,6 +20,10 @@ const collectionSchema = mongoose.Schema({
     password: {
         type: String,
         require: true
+    },
+    role: {
+        type: String,
+        default: 'user'
     }
 })
 

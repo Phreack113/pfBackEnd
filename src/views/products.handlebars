@@ -1,4 +1,12 @@
 <h1 class='title'>Productos</h1>
+<div class="profile">
+    <h2>Profile</h2>
+    <p>Nombre: {{user.first_name}}</p>
+    <p>Apellido: {{user.last_name}}</p>
+    <p>Email: {{user.email}}</p>
+    <p>Role: {{user.role}}</p>
+    <a href="/auth/logout">Logout</a>
+</div>
 <div class="content">
     {{#each products.payload}}
     <div class="product-card">
