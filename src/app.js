@@ -10,6 +10,8 @@ const { Server } = require('socket.io')
 const { port } = require('../config/server.config')
 const mongoose = require('mongoose')
 const dbConnect = require('../db')
+const passport = require('passport')
+const initializePassport = require('./config/passport.config')
 
 const Products = require('./dao/models/Products.model')
 const Messages = require('./dao/models/Messages.model')
@@ -35,6 +37,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
 }))
+
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
